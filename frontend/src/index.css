@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+/* ── Light theme (padrão) ───────────────────────────────────────────── */
+:root {
+  --bg-primary:    #ffffff;
+  --bg-secondary:  #f5f5f5;
+  --bg-tertiary:   #ebebeb;
+  --bg-card:       #ffffff;
+  --bg-sidebar:    #fafafa;
+
+  --text-primary:   #0a0a0a;
+  --text-secondary: #525252;
+  --text-muted:     #a3a3a3;
+
+  --border:        #e5e5e5;
+  --border-strong: #d4d4d4;
+
+  --accent:        #00c97a;
+  --accent-hover:  #00b06b;
+  --accent-text:   #ffffff;
+
+  --danger:        #ef4444;
+  --danger-bg:     #fef2f2;
+  --danger-border: #fecaca;
+}
+
+/* ── Dark theme ─────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg-primary:    #0a0a0a;
+  --bg-secondary:  #111111;
+  --bg-tertiary:   #1a1a1a;
+  --bg-card:       #111111;
+  --bg-sidebar:    #111111;
+
+  --text-primary:   #ffffff;
+  --text-secondary: #a3a3a3;
+  --text-muted:     #525252;
+
+  --border:        #1e1e1e;
+  --border-strong: #2a2a2a;
+
+  --accent:        #00e5a0;
+  --accent-hover:  #00c98d;
+  --accent-text:   #000000;
+
+  --danger:        #f87171;
+  --danger-bg:     #1a0a0a;
+  --danger-border: #3a1414;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────── */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, sans-serif;
+}
+
+/* ── Utilitários de tema (use no JSX como className) ────────────────── */
+.bg-theme-primary   { background-color: var(--bg-primary); }
+.bg-theme-secondary { background-color: var(--bg-secondary); }
+.bg-theme-tertiary  { background-color: var(--bg-tertiary); }
+.bg-theme-card      { background-color: var(--bg-card); }
+.bg-theme-sidebar   { background-color: var(--bg-sidebar); }
+
+.text-theme-primary   { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted     { color: var(--text-muted); }
+
+.border-theme         { border-color: var(--border); }
+.border-theme-strong  { border-color: var(--border-strong); }
+
+.bg-accent    { background-color: var(--accent); }
+.text-accent  { color: var(--accent); }
+.hover-accent:hover { background-color: var(--accent-hover); }

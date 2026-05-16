@@ -1,0 +1,79 @@
+services:
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    env_file: .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  waha-setup:
+    image: curlimages/curl:latest
+    depends_on:
+      - waha
+      - backend
+    restart: "no"
+    command: >
+      sh -c "sleep 15 &&
+      curl -s -X PUT http://waha:3000/api/sessions/default
+      -H 'X-Api-Key: umasenhaqualquer123'
+      -H 'Content-Type: application/json'
+      -d '{\"config\":{\"webhooks\":[{\"url\":\"http://backend:8000/api/webhook/whatsapp\",\"events\":[\"message\"]}]}}'
+      && echo 'Webhook configurado!'"
+
+  waha:
+    image: devlikeapro/waha:latest
+    restart: always
+    ports:
+      - "8080:3000"
+    environment:
+      WAHA_DEFAULT_ENGINE: NOWEB
+      WAHA_API_KEY: ${WAHA_API_KEY}
+      WAHA_DASHBOARD_USERNAME: admin
+      WAHA_DASHBOARD_PASSWORD: admin123
+      WHATSAPP_SWAGGER_USERNAME: admin
+      WHATSAPP_SWAGGER_PASSWORD: admin123
+      WAHA_DASHBOARD_API_KEY: ${WAHA_API_KEY}
+      WAHA_DEFAULT_WEBHOOK_URL: http://backend:8000/api/webhook/whatsapp
+      WAHA_DEFAULT_WEBHOOK_EVENTS: message
+    volumes:
+      - waha_data:/app/.sessions
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
+  waha_data:

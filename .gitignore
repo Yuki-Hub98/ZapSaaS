@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+dist/
+waha_data/
+postgres_data/
+.vscode/
+.idea/
+*.log
